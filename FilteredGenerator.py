@@ -62,7 +62,7 @@ def filter_data(config,data,n_samples,weights_file,y_class):
 	data_len = data.shape[0]
 	filtered_data = torch.Tensor([])
 	y = torch.Tensor([y_class for _ in range(200)])
-	thresh = torch.Tensor([0.7])
+	thresh = torch.Tensor([0.9])
 	for i in range(0,data_len,200):
 		batch_data = torch.Tensor(data2[i:i+200]).to('cuda')
 		batch_real_data = torch.Tensor(data[i:i+200])
@@ -78,7 +78,7 @@ def filter_data(config,data,n_samples,weights_file,y_class):
 	#print('Data Length: ', data_len)
 	filter_ratio = filtered_data.shape[0]/float(data_len)
 	
-	if filter_ratio >= 0.5:
+	if filter_ratio >= 0.2:
 		filtered_data = filtered_data[0:int(n_samples)]
 	
 	return filtered_data, filter_ratio
