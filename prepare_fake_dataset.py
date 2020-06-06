@@ -25,6 +25,7 @@ def run(config, gan_model, num_instances):
     np.savez(npz_filename, **{'x': data.numpy(), 'y': target_class})  
 
   plt.bar(range(10),filter_ratio)
+  print('Filter ratio is: ',filter_ratio)
   plt.show()
 	
   del data, target_class
