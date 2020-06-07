@@ -89,21 +89,21 @@ class RandomCrop(object):
         """
         w, h = _get_image_size(img)
         th, tw = output_size
-        if w == tw and h == th:
-            return 0, 0, h, w
+        #if w == tw and h == th:
+            #return 0, 0, h, w
 
-        i = random.randint(0, h - th)
-        j = random.randint(0, w - tw)
+        i = random.randint(0, 6)
+        j = random.randint(0, 6)
         return i, j, th, tw
 
     def __call__(self, img):
-        img = img[:,]
+        img = torch.nn.functional.pad(img, (3,3,3,3), mode='constant', value=0)
         # pad the width if needed
-        if self.pad_if_needed and img.shape[1] > self.size[0]:
-            img = F.pad(img, (self.size[0] - img.shape[1], 0), self.padding_mode, self.fill)
+        #if self.pad_if_needed and img.shape[1] > self.size[0]:
+            #img = F.pad(img, (self.size[0] - img.shape[1], 0), self.padding_mode, self.fill)
         # pad the height if needed
-        if self.pad_if_needed and img.shape[2] > self.size[1]:
-            img = F.pad(img, (0, self.size[1] - img.shape[2]), self.padding_mode, self.fill)
+        #if self.pad_if_needed and img.shape[2] > self.size[1]:
+            #img = F.pad(img, (0, self.size[1] - img.shape[2]), self.padding_mode, self.fill)
 
         i, j, h, w = self.get_params(img, self.size)
 
