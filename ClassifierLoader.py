@@ -97,22 +97,17 @@ class RandomCrop(object):
         return i, j, th, tw
 
     def __call__(self, img):
-        """
-        Args:
-            img (PIL Image): Image to be cropped.
-        Returns:
-            PIL Image: Cropped image.
-        """
+        img = img[:,]
         # pad the width if needed
-        if self.pad_if_needed and img.size[0] < self.size[1]:
-            img = F.pad(img, (self.size[1] - img.size[0], 0), self.padding_mode, self.fill)
+        if self.pad_if_needed and img.shape[1] > self.size[0]:
+            img = F.pad(img, (self.size[0] - img.shape[1], 0), self.padding_mode, self.fill)
         # pad the height if needed
-        if self.pad_if_needed and img.size[1] < self.size[0]:
-            img = F.pad(img, (0, self.size[0] - img.size[1]), self.padding_mode, self.fill)
+        if self.pad_if_needed and img.shape[2] > self.size[1]:
+            img = F.pad(img, (0, self.size[1] - img.shape[2]), self.padding_mode, self.fill)
 
         i, j, h, w = self.get_params(img, self.size)
 
-        return img[i:i+h,j:j+w]
+        return img[:,i:i+h,j:j+w]
 
     def __repr__(self):
         return self.__class__.__name__ + '(size={0}, padding={1})'.format(self.size, self.padding)
