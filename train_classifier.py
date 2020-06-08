@@ -90,7 +90,7 @@ def main(config):
     #load real data for distance computation
     b_size = 50000
     normalize_real = transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])
-    transform_real = transforms.Compose([transforms.ToTensor(), normalize_real])
+    transform_real = transforms.Compose([normalize_real])
     trainset_real = GANDataset( 'samples/real_data/CIFAR10_training.npz', 'samples/real_data/CIFAR10_weights.npz', transform=transform_real)
     trainloader_real = torch.utils.data.DataLoader(trainset_real, batch_size=b_size, shuffle=False, num_workers=0, pin_memory=True)
     
