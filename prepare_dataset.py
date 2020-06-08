@@ -57,6 +57,12 @@ def run(config, gan_model, num_instances):
   npz_filename = '%s/%s.npz' % ('samples/real_data', ofile) 
   np.savez(npz_filename, **{'x': x_train, 'y': y_train})
   print('Real data successfully prepared..!!')
+	
+  #preparing initial weights	
+  weights = np.ones((50000,))
+  ofilew = 'CIFAR10_weights'
+  npz_filename = '%s/%s.npz' % ('samples/real_data', ofilew)
+  np.savez(npz_filename, **{'w': weights})
   
 
 def main():
