@@ -6,9 +6,9 @@ import numpy as np
 from classifier.resnetw import resnet20
 
 
-global resnet_real_feats, dist
+global dist
 
-#dist = [ torch.Tensor([]).to('cuda') for _ in range(10) ]
+dist = [ torch.Tensor([]).to('cuda') for _ in range(10) ]
 #resnet_real_feats, indices = get_real_feats('resnet20')
 
 
@@ -35,7 +35,8 @@ def get_real_feats(trainloader, weights_file, n_classes=10):
   print()
   print('Computing feature vectors for real data....')
   #separate different classes instances in the dataset of real images
-  for data, label in trainloader:
+  for data, label, _ in trainloader:
+    label = label.reshape(-1,)
     for i in range(n_classes):
       index[i] = (label == i).nonzero()
       classified_data[i] = torch.squeeze(data[index[i]])
@@ -90,7 +91,9 @@ def compute_distance(real_data_feats, gen_data_feats):
   return torch.unsqueeze(min_distances_squared,dim=1)
 
 
-def compute_all_distances(data,weights_file,current_class,n_classes=10):
+def compute_all_distances(data,resnet_real_feats,weights_file,current_class,n_classes=10):
+  global dist
+
   ind = current_class
   resnet_gen_feats = get_gen_feats(data,weights_file)
 
@@ -101,18 +104,20 @@ def compute_all_distances(data,weights_file,current_class,n_classes=10):
   return dist[ind]
 
 
-def get_sample_weights(config):
-	for i in range(config['n_classes']):
-		filedir = 'samples/samples_class' + str(i) +'.npz'
-		data1 = (np.load(filedir)['x']/255.0) - np.array([[[0.4914]],[[0.4822]],[[0.4465]]]) / np.array([[[0.2470]],[[0.2435]],[[0.2616]]])
-		dist[i] = compute_all_distances(torch.FloatTensor(data1),'resnet20',i)
+def get_sample_weights(resnet_real_feats,indices,config):
+  global dist
 
-	sample_weights = torch.zeros((50000), dtype=torch.float32).to('cuda')
-	for i in range(config['n_classes']):
-		sample_weights[indices[i]] = dist[i]
+  for i in range(config['n_classes']):
+    filedir = 'samples/samples_class' + str(i) +'.npz'
+    data1 = (np.load(filedir)['x']/255.0) - np.array([[[0.4914]],[[0.4822]],[[0.4465]]]) / np.array([[[0.2470]],[[0.2435]],[[0.2616]]])
+    dist[i] = compute_all_distances(torch.FloatTensor(data1),resnet_real_feats,'resnet20',i)
+
+  sample_weights = torch.zeros((50000), dtype=torch.float32).to('cuda')
+  for i in range(config['n_classes']):
+    sample_weights[indices[i]] = dist[i]
 		
-	ofilew = 'CIFAR10_weights'
-	npz_filename = '%s/%s.npz' % ('samples/real_data', ofilew)
-	np.savez(npz_filename, **{'w': sample_weights})
+  ofilew = 'CIFAR10_weights'
+  npz_filename = '%s/%s.npz' % ('samples/real_data', ofilew)
+  np.savez(npz_filename, **{'w': sample_weights.numpy()})
 		
-	return sample_weights
+  return sample_weights
