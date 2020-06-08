@@ -8,8 +8,8 @@ from classifier.resnetw import resnet20
 
 global resnet_real_feats, dist
 
-dist = [ torch.Tensor([]).to('cuda') for _ in range(10) ]
-resnet_real_feats, indices = get_real_feats('resnet20')
+#dist = [ torch.Tensor([]).to('cuda') for _ in range(10) ]
+#resnet_real_feats, indices = get_real_feats('resnet20')
 
 
 ##Computed only once
