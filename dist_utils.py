@@ -13,7 +13,7 @@ resnet_real_feats, indices = get_real_feats('resnet20')
 
 
 ##Computed only once
-def get_real_feats(weights_file, n_classes=10):
+def get_real_feats(trainloader, weights_file, n_classes=10):
   """
     Computes the resnet features of cifar10 real image data
     The output is a list of tensors with len(list) = n_classes
@@ -26,13 +26,6 @@ def get_real_feats(weights_file, n_classes=10):
   #model = resnet20().to('cuda')
   #model.load_state_dict(torch.load('resnet20.pth'))
   model.eval()
-
-  #load real data
-  b_size = 50000
-  normalize = transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])
-  transform = transforms.Compose([transforms.ToTensor(), normalize])
-  trainset = torchvision.datasets.CIFAR10( root='./data', train=True, download=True, transform=transform)
-  trainloader = torch.utils.data.DataLoader(trainset, batch_size=b_size, shuffle=True, num_workers=0, pin_memory=True)
 
   #preparing resnet feature vectors of the real data
   #n_classes = 10
@@ -99,9 +92,7 @@ def compute_distance(real_data_feats, gen_data_feats):
 
 def compute_all_distances(data,weights_file,current_class,n_classes=10):
   ind = current_class
-  print('in')
   resnet_gen_feats = get_gen_feats(data,weights_file)
-  print('out')
 
   dist[ind] = torch.cat((dist[ind],compute_distance(resnet_real_feats[ind], resnet_gen_feats)),dim=1)
   dist[ind], _ = torch.min(dist[ind],dim=1)
@@ -119,5 +110,9 @@ def get_sample_weights(config):
 	sample_weights = torch.zeros((50000), dtype=torch.float32).to('cuda')
 	for i in range(config['n_classes']):
 		sample_weights[indices[i]] = dist[i]
+		
+	ofilew = 'CIFAR10_weights'
+	npz_filename = '%s/%s.npz' % ('samples/real_data', ofilew)
+	np.savez(npz_filename, **{'w': sample_weights})
 		
 	return sample_weights
