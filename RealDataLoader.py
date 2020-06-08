@@ -49,7 +49,7 @@ class GANDataset(Dataset):
 		#sample = {'image': image, 'label': label}
 
 		if self.transform:
-			image = self.transform(sample['image'])
+			image = self.transform(torch.Tensor(sample['image']))
 
 		#sample = {'image': image, 'label': sample['label']}
 
