@@ -71,7 +71,7 @@ def main():
 	
   utils.update_config(config)
 
-  run(config,'55k_hier_z',50000)
+  run(config,'BigGAN_C10_seed0_Gch64_Dch64_bs50_nDs4_Glr2.0e-04_Dlr2.0e-04_Gnlrelu_Dnlrelu_GinitN02_DinitN02_ema',50000)
 
 
 if __name__ == '__main__':
