@@ -19,7 +19,7 @@ warnings.filterwarnings("ignore")
 plt.ion()   # interactive mode
 
 
-class ClassifierDataset(Dataset):
+class GANDataset(Dataset):
 	"""ClassifierDataLoader"""
 
 	def __init__(self, root_dir, weights_dir transform=None):
