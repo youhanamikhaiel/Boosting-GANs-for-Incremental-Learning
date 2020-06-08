@@ -19,6 +19,26 @@ import params
 
 
 def main(config):
+    
+    
+    """
+    Computing minimum distance between real data samples and the generated data distribution
+    """
+        
+    global resnet_real_feats, dist
+    dist = [ torch.Tensor([]).to('cuda') for _ in range(10) ]
+    resnet_real_feats, indices = dist_utils.get_real_feats('resnet20')
+    
+    #load real data for distance computation
+    b_size = 50000
+    normalize_real = transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])
+    transform_real = transforms.Compose([normalize_real])
+    trainset_real = GANDataset( 'samples/real_data/CIFAR10_training.npz', 'samples/real_data/CIFAR10_weights.npz', transform=transform_real)
+    trainloader_real = torch.utils.data.DataLoader(trainset_real, batch_size=b_size, shuffle=False, num_workers=0, pin_memory=True)
+    
+    persample_weights = dist_utils.get_sample_weights(config)
+    
+    
     """
     Training a resnet20 classifier on generated images
     """
@@ -78,23 +98,6 @@ def main(config):
     for i in range(num_classes):
         print('Accuracy of %5s : %2.2f %%' % (classes[i], 100 * class_correct[i] / class_total[i]))
         
-        
-    """
-    Computing minimum distance between real data samples and the generated data distribution
-    """
-        
-    global resnet_real_feats, dist
-    dist = [ torch.Tensor([]).to('cuda') for _ in range(10) ]
-    resnet_real_feats, indices = dist_utils.get_real_feats('resnet20')
-    
-    #load real data for distance computation
-    b_size = 50000
-    normalize_real = transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])
-    transform_real = transforms.Compose([normalize_real])
-    trainset_real = GANDataset( 'samples/real_data/CIFAR10_training.npz', 'samples/real_data/CIFAR10_weights.npz', transform=transform_real)
-    trainloader_real = torch.utils.data.DataLoader(trainset_real, batch_size=b_size, shuffle=False, num_workers=0, pin_memory=True)
-    
-    persample_weights = dist_utils.get_sample_weights(config)
   
 
 
