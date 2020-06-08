@@ -22,7 +22,7 @@ def get_real_feats(trainloader, weights_file, n_classes=10):
   """
   #load classifier
   model = resnet20().to('cuda')
-  model.load_state_dict(torch.load('./classifiers/weights/%s.pth' % weights_file))
+  model.load_state_dict(torch.load('./classifier/weights/%s.pth' % weights_file))
   #model = resnet20().to('cuda')
   #model.load_state_dict(torch.load('resnet20.pth'))
   model.eval()
@@ -60,7 +60,7 @@ def get_gen_feats(data,weights_file,n_classes=10):
   """
   #load classifier
   model = resnet20().to('cuda')
-  model.load_state_dict(torch.load('./classifiers/weights/%s.pth' % weights_file))
+  model.load_state_dict(torch.load('./classifier/weights/%s.pth' % weights_file))
   #model = resnet20().to('cuda')
   #model.load_state_dict(torch.load('resnet20.pth'))
   model.eval()
