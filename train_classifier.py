@@ -19,6 +19,9 @@ import params
 
 
 def main(config):
+    """
+    Training a resnet20 classifier on generated images
+    """
     
     #initialize training paramteres
     train_batch_size = 125
@@ -75,6 +78,10 @@ def main(config):
     for i in range(num_classes):
         print('Accuracy of %5s : %2.2f %%' % (classes[i], 100 * class_correct[i] / class_total[i]))
         
+        
+    """
+    Computing minimum distance between real data samples and the generated data distribution
+    """
         
     global resnet_real_feats, dist
     dist = [ torch.Tensor([]).to('cuda') for _ in range(10) ]
