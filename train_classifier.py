@@ -81,7 +81,7 @@ def main(config):
     #main training 
     t1 = ctime()
     for epoch in range(epochs):  # loop over the dataset multiple times
-        train(epoch, net, trainloader, device, optimizer, scheduler, criterionMC, criterionML, alpha)
+        train(epoch, net, trainloader, trainset, device, optimizer, scheduler, criterionMC, criterionML, alpha)
         evaluate(net, testloader, device)
         scheduler.step()
     tt = ctime()-t1
