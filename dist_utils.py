@@ -121,3 +121,4 @@ def get_sample_weights(resnet_real_feats,indices,config):
   np.savez(npz_filename, **{'w': sample_weights.cpu().numpy()})
 		
   return sample_weights
+
