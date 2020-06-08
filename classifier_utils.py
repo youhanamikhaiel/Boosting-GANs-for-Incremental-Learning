@@ -11,6 +11,17 @@ import time
 import pickle
 from sklearn.metrics import average_precision_score
 
+#initialize training paramteres
+train_batch_size = 125
+test_batch_size = 400
+verbose = 0
+epochs = 132
+pos_weight = 18
+alpha = 0.9
+threshold = 1.4
+weight_decay = 0.0001
+lr0 = 0.1
+num_classes = 10
 
 
 def ctime():
@@ -73,7 +84,7 @@ def evaluate(net, loader, device, set = 'Test'):
 
 
 
-def train(epoch, net, trainloader, device, optimizer, scheduler, criterionMC, criterionML, alpha):
+def train(epoch, net, trainloader, trainset, device, optimizer, scheduler, criterionMC, criterionML, alpha):
     print('Epoch: %3d' % epoch, end = "  ")
     running_loss = 0.0
     t0 = ctime()
