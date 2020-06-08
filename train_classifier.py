@@ -17,6 +17,14 @@ from classifier_utils import ctime, getScoresLabels, getRates, accuracy, evaluat
 
 def main():
     
+    #load real data for distance computation
+    b_size = 50000
+    normalize = transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])
+    transform = transforms.Compose([transforms.ToTensor(), normalize])
+    trainset = torchvision.datasets.CIFAR10( root='./data', train=True, download=True, transform=transform)
+    trainloader = torch.utils.data.DataLoader(trainset, batch_size=b_size, shuffle=False, num_workers=0, pin_memory=True)
+    
+    
     #initialize training paramteres
     train_batch_size = 125
     test_batch_size = 400
