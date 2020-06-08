@@ -1,4 +1,5 @@
 from ClassifierLoader import ClassifierDataset, RandomCrop, RandomHorizontalFlip
+from RealDataLoader import GANDataset, ToTensor
 import numpy as np
 import torch
 import matplotlib.pyplot as plt
@@ -16,14 +17,6 @@ from classifier_utils import ctime, getScoresLabels, getRates, accuracy, evaluat
 
 
 def main():
-    
-    #load real data for distance computation
-    b_size = 50000
-    normalize_real = transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])
-    transform_real = transforms.Compose([transforms.ToTensor(), normalize_real])
-    trainset_real = torchvision.datasets.CIFAR10( root='./data', train=True, download=True, transform=transform_real)
-    trainloader_real = torch.utils.data.DataLoader(trainset_real, batch_size=b_size, shuffle=False, num_workers=0, pin_memory=True)
-    
     
     #initialize training paramteres
     train_batch_size = 125
@@ -79,6 +72,15 @@ def main():
     classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
     for i in range(num_classes):
         print('Accuracy of %5s : %2.2f %%' % (classes[i], 100 * class_correct[i] / class_total[i]))
+        
+        
+    
+    #load real data for distance computation
+    b_size = 50000
+    normalize_real = transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])
+    transform_real = transforms.Compose([transforms.ToTensor(), normalize_real])
+    trainset_real = GANDataset( 'samples/real_data/CIFAR10_training.npz', 'samples/real_data/CIFAR10_weights.npz', transform=transform_real)
+    trainloader_real = torch.utils.data.DataLoader(trainset_real, batch_size=b_size, shuffle=False, num_workers=0, pin_memory=True)
   
 
 
