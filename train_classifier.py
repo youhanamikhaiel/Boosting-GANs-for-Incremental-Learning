@@ -87,7 +87,7 @@ def main(config):
     trainset_real = GANDataset( 'samples/real_data/CIFAR10_training.npz', 'samples/real_data/CIFAR10_weights.npz', transform=transform_real)
     trainloader_real = torch.utils.data.DataLoader(trainset_real, batch_size=b_size, shuffle=False, num_workers=0, pin_memory=True)
     
-    persample_weights = dist_utils.get_sample_weights()
+    persample_weights = dist_utils.get_sample_weights(config)
   
 
 
