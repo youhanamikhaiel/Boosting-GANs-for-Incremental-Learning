@@ -5,6 +5,8 @@ import params
 import utils
 import FilteredGenerator
 import matplotlib.pyplot as plt
+import keras
+from keras.datasets import cifar10
 
 
 def run(config, gan_model, num_instances):
@@ -45,7 +47,16 @@ def run(config, gan_model, num_instances):
   npz_filename = '%s/%s.npz' % ('samples', 'samples_total')
   print('Saving npz to %s...' % npz_filename)
   np.savez(npz_filename, **{'x': total_data_x[s].numpy(), 'y': total_data_y[s].numpy()})  
-  
+
+  #prepare real data
+  print('Preparing real data....')
+  (x_train, y_train), (_, _) = cifar10.load_data()
+  x_train = np.transpose(x_train,(0,3,1,2))
+  y_train = y_train.reshape((-1,))
+  ofile = 'CIFAR10_training'
+  npz_filename = '%s/%s.npz' % ('samples/real_data', ofile) 
+  np.savez(npz_filename, **{'x': x_train, 'y': y_train})
+  print('Real data successfully prepared..!!')
   
 
 def main():
