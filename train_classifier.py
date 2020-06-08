@@ -16,6 +16,8 @@ from classifier_utils import ctime, getScoresLabels, getRates, accuracy, evaluat
 
 
 def main():
+    
+    #initialize training paramteres
     train_batch_size = 125
     test_batch_size = 400
     verbose = 0
@@ -26,25 +28,31 @@ def main():
     weight_decay = 0.0001
     lr0 = 0.1
     num_classes = 10
-
+    
+    #import fake training dataloader with proper transormations
     normalize = transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])
     transform_train = transforms.Compose([RandomHorizontalFlip() , RandomCrop(size=32,padding=4), normalize])
     trainset = ClassifierDataset('samples/samples_total.npz',transform=transform_train)
-    trainloader = torch.utils.data.DataLoader(trainset, batch_size=125, shuffle=True, num_workers=8, pin_memory=True)
-
+    trainloader = torch.utils.data.DataLoader(trainset, batch_size=train_batch_size, shuffle=True, num_workers=8, pin_memory=True)
+    
+    #import real testing dataloader 
     transform_test = transforms.Compose([transforms.ToTensor(), normalize])
     testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform_test)
-    testloader = torch.utils.data.DataLoader(testset, batch_size=400, shuffle=False, num_workers=8, pin_memory=True)
-
+    testloader = torch.utils.data.DataLoader(testset, batch_size=test_batch_size, shuffle=False, num_workers=8, pin_memory=True)
+    
+    #make sure that cuda is available
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     
+    #import resnet classifier model
     net = resnet20().to(device)
     
+    #define optimization and learning hyperparameters
     criterionMC = nn.CrossEntropyLoss()
     criterionML = nn.BCEWithLogitsLoss(pos_weight=pos_weight*torch.ones([num_classes]).to(device))
     optimizer = optim.SGD(net.parameters(), lr=lr0, momentum=0.9, weight_decay=weight_decay)
     scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[epochs//2,(3*epochs)//4])
     
+    #main training 
     t1 = ctime()
     for epoch in range(epochs):  # loop over the dataset multiple times
         train(epoch, net, trainloader, device, optimizer, scheduler, criterionMC, criterionML, alpha)
@@ -53,12 +61,11 @@ def main():
     tt = ctime()-t1
     print('Finished Training, total time %4.2fs' % (tt))
 
-
+    #print total test accuracy and per-class accuracy
     t0 = ctime()
     scores, labels = getScoresLabels(net, testloader, device)
     class_correct, class_total = accuracy(scores, labels)
     print('Test time: %3.2fs' % (ctime()-t0))
-
     print('Overall accuracy  : %2.2f %%' % (100 * sum(class_correct) / sum(class_total)))
     print()
     classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
