@@ -30,7 +30,7 @@ class GANDataset(Dataset):
 				on a sample.
 		"""
 		self.labels = np.load(root_dir)['y']
-		self.data = np.load(root_dir)['x']
+		self.data = np.load(root_dir)['x']/255.0
 		self.weights = np.load(weights_dir)['w']
 		self.transform = transform
 
