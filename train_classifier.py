@@ -1,5 +1,5 @@
 from ClassifierLoader import ClassifierDataset, RandomCrop, RandomHorizontalFlip
-from RealDataLoader import GANDataset, ToTensor
+from RealDataLoader import GANDataset
 import numpy as np
 import torch
 import matplotlib.pyplot as plt
