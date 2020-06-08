@@ -19,10 +19,10 @@ def main():
     
     #load real data for distance computation
     b_size = 50000
-    normalize = transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])
-    transform = transforms.Compose([transforms.ToTensor(), normalize])
-    trainset = torchvision.datasets.CIFAR10( root='./data', train=True, download=True, transform=transform)
-    trainloader = torch.utils.data.DataLoader(trainset, batch_size=b_size, shuffle=False, num_workers=0, pin_memory=True)
+    normalize_real = transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])
+    transform_real = transforms.Compose([transforms.ToTensor(), normalize_real])
+    trainset_real = torchvision.datasets.CIFAR10( root='./data', train=True, download=True, transform=transform_real)
+    trainloader_real = torch.utils.data.DataLoader(trainset_real, batch_size=b_size, shuffle=False, num_workers=0, pin_memory=True)
     
     
     #initialize training paramteres
