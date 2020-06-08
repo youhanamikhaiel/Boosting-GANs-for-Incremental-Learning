@@ -2,6 +2,7 @@
    General architecture used for the GAN models '''
 
 params = {'dataset': 'C10',
+          'n_classes': 10,
           'augment': False,
           'num_workers': 8,
           'pin_memory': True,
