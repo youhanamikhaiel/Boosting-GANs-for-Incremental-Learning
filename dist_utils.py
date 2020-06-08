@@ -3,7 +3,7 @@ import torchvision
 import torchvision.transforms as transforms
 import matplotlib.pyplot as plt
 import numpy as np
-from classifier import resnet20, resnetw
+from classifier.resnetw import resnet20
 
 
 global resnet_real_feats, dist
