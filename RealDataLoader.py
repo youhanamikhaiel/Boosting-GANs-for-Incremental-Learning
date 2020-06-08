@@ -22,7 +22,7 @@ plt.ion()   # interactive mode
 class GANDataset(Dataset):
 	"""ClassifierDataLoader"""
 
-	def __init__(self, root_dir, weights_dir transform=None):
+	def __init__(self, root_dir, weights_dir, transform=None):
 		"""
 		Args:
 			root_dir (string): Directory with data
