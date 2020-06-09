@@ -276,6 +276,7 @@ class CIFAR10(dset.CIFAR10):
       else:
         self.labels += entry['fine_labels']
       fo.close()
+    self.weights = np.load('data_weights/CIFAR10_weights.npz')['w']
         
     self.data = np.concatenate(self.data)
     # Randomly select indices for validation
@@ -331,6 +332,7 @@ class CIFAR10(dset.CIFAR10):
         tuple: (image, target) where target is index of the target class.
     """
     img, target = self.data[index], self.labels[index]
+    weight = self.weights[index]
 
     # doing this so that it is consistent with all other datasets
     # to return a PIL Image
@@ -342,7 +344,7 @@ class CIFAR10(dset.CIFAR10):
     if self.target_transform is not None:
       target = self.target_transform(target)
 
-    return img, target
+    return img, target, weight
       
   def __len__(self):
       return len(self.data)
