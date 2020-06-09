@@ -686,7 +686,7 @@ def join_strings(base_string, strings):
 # Save a model's weights, optimizer, and the state_dict
 def save_weights(G, D, state_dict, weights_root, experiment_name, 
                  name_suffix=None, G_ema=None):
-  root = '/'.join([weights_root, experiment_name])
+  root = '/re_'.join([weights_root, experiment_name])
   if not os.path.exists(root):
     os.mkdir(root)
   if name_suffix:
