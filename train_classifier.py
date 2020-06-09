@@ -15,6 +15,7 @@ from sklearn.metrics import average_precision_score
 from classifier_utils import ctime, getScoresLabels, getRates, accuracy, evaluate, train
 import dist_utils
 import params
+import math
 
 
 
@@ -39,6 +40,8 @@ def main(config):
     persample_weights = dist_utils.get_sample_weights(resnet_real_feats,indices,config)
     
     del resnet_real_feats, indices
+    
+    
     """
     Training a resnet20 classifier on generated images
     """
@@ -78,9 +81,13 @@ def main(config):
     optimizer = optim.SGD(net.parameters(), lr=lr0, momentum=0.9, weight_decay=weight_decay)
     scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[epochs//2,(3*epochs)//4])
     
+    #calculate number of iteration
+    total_iter = epoch*(50000/train_batch_size)
+    new_epochs = math.ceil(total_iter/len(trainset))
+    
     #main training 
     t1 = ctime()
-    for epoch in range(epochs):  # loop over the dataset multiple times
+    for epoch in range(new_epochs):  # loop over the dataset multiple times
         train(epoch, net, trainloader, trainset, device, optimizer, scheduler, criterionMC, criterionML, alpha)
         evaluate(net, testloader, device)
         scheduler.step()
