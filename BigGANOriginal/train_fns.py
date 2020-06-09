@@ -24,7 +24,7 @@ def GAN_training_function(G, D, GD, z_, y_, ema, state_dict, config):
     # How many chunks to split x and y into?
     x = torch.split(x, config['batch_size'])
     y = torch.split(y, config['batch_size'])
-    w = torch.split(w, config['batch_size'])
+    #w = torch.split(w, config['batch_size'])
     counter = 0
     
     # Optionally toggle D and G's "require_grad"
@@ -70,7 +70,7 @@ def GAN_training_function(G, D, GD, z_, y_, ema, state_dict, config):
       z_.sample_()
       y_.sample_()
       D_fake = GD(z_, y_, train_G=True, split_D=config['split_D'])
-      G_loss = losses.generator_loss(D_fake) / float(config['num_G_accumulations'])*w[counter]
+      G_loss = losses.generator_loss(D_fake) / float(config['num_G_accumulations'])*w
       G_loss.backward()
     
     # Optionally apply modified ortho reg in G
