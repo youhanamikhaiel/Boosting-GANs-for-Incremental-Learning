@@ -83,7 +83,7 @@ def main(config):
     
     #calculate number of iteration
     total_iter = epoch*(50000/train_batch_size)
-    new_epochs = math.ceil(total_iter/len(trainset))
+    new_epochs = math.ceil(total_iter/(len(trainset)/train_batch_size))
     
     #main training 
     t1 = ctime()
