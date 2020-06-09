@@ -117,7 +117,7 @@ def get_sample_weights(resnet_real_feats,indices,config):
     sample_weights[indices[i]] = dist[i]
 		
   ofilew = 'CIFAR10_weights'
-  npz_filename = '%s/%s.npz' % ('samples/real_data', ofilew)
+  npz_filename = '%s/%s.npz' % ('BigGANOriginal/data_weights/', ofilew)
   np.savez(npz_filename, **{'w': sample_weights.cpu().numpy()})
 		
   return sample_weights
