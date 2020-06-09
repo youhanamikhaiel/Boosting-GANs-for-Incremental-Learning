@@ -562,7 +562,7 @@ def get_data_loaders(dataset, data_root=None, augment=False, batch_size=64,
     train_transform = transforms.Compose(train_transform + [
                      transforms.ToTensor(),
                      transforms.Normalize(norm_mean, norm_std)])
-  train_set = which_dataset(root=data_root, transform=train_transform,
+  train_set = dset.CIFAR10(root=data_root, transform=train_transform,
                             load_in_mem=load_in_mem, **dataset_kwargs)
 
   # Prepare loader; the loaders list is for forward compatibility with
