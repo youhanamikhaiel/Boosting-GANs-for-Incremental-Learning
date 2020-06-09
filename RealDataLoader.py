@@ -30,7 +30,7 @@ class GANDataset(Dataset):
 				on a sample.
 		"""
 		self.labels = np.load(root_dir)['y']
-		self.data = np.load(root_dir)['x']/255.0
+		self.data = np.load(root_dir)['x']
 		self.weights = np.load(weights_dir)['w']
 		self.transform = transform
 
@@ -49,7 +49,7 @@ class GANDataset(Dataset):
 		#sample = {'image': image, 'label': label}
 
 		if self.transform:
-			image = self.transform(torch.Tensor(sample['image']))
+			image = self.transform(torch.Tensor(sample['image']/255.0))
 
 		#sample = {'image': image, 'label': sample['label']}
 
