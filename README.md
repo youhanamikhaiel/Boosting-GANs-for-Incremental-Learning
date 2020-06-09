@@ -1,1 +1,1 @@
-# BigGANs_testy
+# Boosting GANs for Incremental Learning
