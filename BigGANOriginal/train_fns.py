@@ -25,7 +25,7 @@ def GAN_training_function(G, D, GD, z_, y_, ema, state_dict, config):
     x = torch.split(x, config['batch_size'])
     y = torch.split(y, config['batch_size'])
     w = torch.Tensor(w).to('cuda')
-    w = torch.split(w, config['batch_size'])
+    wt = torch.split(w, config['batch_size'])
     counter = 0
     
     # Optionally toggle D and G's "require_grad"
@@ -45,7 +45,7 @@ def GAN_training_function(G, D, GD, z_, y_, ema, state_dict, config):
          
         # Compute components of D's loss, average them, and divide by 
         # the number of gradient accumulations
-        D_loss_real, D_loss_fake = losses.discriminator_loss(D_fake*w[counter], D_real)
+        D_loss_real, D_loss_fake = losses.discriminator_loss(D_fake*wt[counter], D_real)
         D_loss = (D_loss_real + D_loss_fake) / float(config['num_D_accumulations'])
         D_loss.backward()
         counter += 1
