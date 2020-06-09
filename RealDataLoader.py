@@ -54,3 +54,76 @@ class GANDataset(Dataset):
 		#sample = {'image': image, 'label': sample['label']}
 
 		return image, label, weight
+	
+	
+	
+class RandomCrop(object):
+    
+    def __init__(self, size, padding=None, pad_if_needed=False, fill=0, padding_mode='constant'):
+        if isinstance(size, numbers.Number):
+            self.size = (int(size), int(size))
+        else:
+            self.size = size
+        self.padding = padding
+        self.pad_if_needed = pad_if_needed
+        self.fill = fill
+        self.padding_mode = padding_mode
+
+    @staticmethod
+    def get_params(img, output_size):
+        """Get parameters for ``crop`` for a random crop.
+        Args:
+            img (PIL Image): Image to be cropped.
+            output_size (tuple): Expected output size of the crop.
+        Returns:
+            tuple: params (i, j, h, w) to be passed to ``crop`` for random crop.
+        """
+        w, h = _get_image_size(img)
+        th, tw = output_size
+        #if w == tw and h == th:
+            #return 0, 0, h, w
+
+        i = random.randint(0, 6)
+        j = random.randint(0, 6)
+        return i, j, th, tw
+
+    def __call__(self, img):
+        img = torch.nn.functional.pad(img, (3,3,3,3), mode='constant', value=0)
+        # pad the width if needed
+        #if self.pad_if_needed and img.shape[1] > self.size[0]:
+            #img = F.pad(img, (self.size[0] - img.shape[1], 0), self.padding_mode, self.fill)
+        # pad the height if needed
+        #if self.pad_if_needed and img.shape[2] > self.size[1]:
+            #img = F.pad(img, (0, self.size[1] - img.shape[2]), self.padding_mode, self.fill)
+
+        i, j, h, w = self.get_params(img, self.size)
+
+        return img[:,i:i+h,j:j+w]
+
+    def __repr__(self):
+        return self.__class__.__name__ + '(size={0}, padding={1})'.format(self.size, self.padding)
+
+
+
+
+
+class RandomHorizontalFlip(torch.nn.Module):
+    """Horizontally flip the given image randomly with a given probability.
+    The image can be a PIL Image or a torch Tensor, in which case it is expected
+    to have [..., H, W] shape, where ... means an arbitrary number of leading
+    dimensions
+    Args:
+        p (float): probability of the image being flipped. Default value is 0.5
+    """
+
+    def __init__(self, p=0.5):
+        super().__init__()
+        self.p = p
+
+    def forward(self, img):
+        if torch.rand(1) < self.p:
+            return torch.flip(img,dims=[2])
+        return img
+
+    def __repr__(self):
+        return self.__class__.__name__ + '(p={})'.format(self.p)
