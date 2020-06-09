@@ -70,7 +70,7 @@ def GAN_training_function(G, D, GD, z_, y_, ema, state_dict, config):
       z_.sample_()
       y_.sample_()
       D_fake = GD(z_, y_, train_G=True, split_D=config['split_D'])
-      G_loss = losses.generator_loss(D_fake*w) / float(config['num_G_accumulations'])
+      G_loss = losses.generator_loss(D_fake*torch.Tensor(w).to('cuda')) / float(config['num_G_accumulations'])
       G_loss.backward()
     
     # Optionally apply modified ortho reg in G
