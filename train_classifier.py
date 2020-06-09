@@ -82,7 +82,7 @@ def main(config):
     scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[epochs//2,(3*epochs)//4])
     
     #calculate number of iteration
-    total_iter = epoch*(50000/train_batch_size)
+    total_iter = epochs*(50000/train_batch_size)
     new_epochs = math.ceil(total_iter/(len(trainset)/train_batch_size))
     
     #main training 
