@@ -52,12 +52,17 @@ def run(config, gan_model, num_instances):
 
   #prepare real data
   print('Preparing real data....')
-  (x_train, y_train), (_, _) = cifar10.load_data()
-  x_train = np.transpose(x_train,(0,3,1,2))
-  y_train = y_train.reshape((-1,))
+  D_batch_size = (config['batch_size'] * config['num_D_steps'] * config['num_D_accumulations'])
+  loaders = utils.get_data_loaders(**{**config, 'batch_size': D_batch_size})
+  x_train = torch.Tensor([])
+  y_train = torch.LongTensor([])
+  for i,j in loaders[0]:
+    x_train = torch.cat((x_train,i),dim=0)
+    y_train = torch.cat((y_train,j),dim=0)
+	
   ofile = 'CIFAR10_training'
   npz_filename = '%s/%s.npz' % ('samples/real_data', ofile) 
-  np.savez(npz_filename, **{'x': x_train, 'y': y_train})
+  np.savez(npz_filename, **{'x': x_train.numpy(), 'y': y_train.numpy()})
   print('Real data successfully prepared..!!')
 	
   #preparing initial weights	
