@@ -18,12 +18,13 @@ def dummy_training_function():
 
 
 def GAN_training_function(G, D, GD, z_, y_, ema, state_dict, config):
-  def train(x, y):
+  def train(x, y, w):
     G.optim.zero_grad()
     D.optim.zero_grad()
     # How many chunks to split x and y into?
     x = torch.split(x, config['batch_size'])
     y = torch.split(y, config['batch_size'])
+    w = torch.split(w, config['batch_size'])
     counter = 0
     
     # Optionally toggle D and G's "require_grad"
