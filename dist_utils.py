@@ -115,6 +115,11 @@ def get_sample_weights(resnet_real_feats,indices,config):
   sample_weights = torch.zeros((50000), dtype=torch.float32).to('cuda')
   for i in range(config['n_classes']):
     sample_weights[indices[i]] = dist[i]
+
+  #calculate weights from distances
+  k=2
+  sig = torch.sigmoid(k*(sample_weights-torch.mean(sample_weights))/torch.std(sample_weights))
+  sample_weights = 0.5 + 0.5*sig
 		
   ofilew = 'CIFAR10_weights'
   npz_filename = '%s/%s.npz' % ('BigGANOriginal/data_weights/', ofilew)
