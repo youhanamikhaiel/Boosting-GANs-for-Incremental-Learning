@@ -5,9 +5,7 @@ import params
 import utils
 import FilteredGenerator
 import matplotlib.pyplot as plt
-import keras
-from keras.datasets import cifar10
-
+import BigGANOriginal.utils as utilso
 
 def run(config, gan_model, num_instances):
 	
@@ -49,11 +47,13 @@ def run(config, gan_model, num_instances):
   npz_filename = '%s/%s.npz' % ('samples', 'samples_total')
   print('Saving npz to %s...' % npz_filename)
   np.savez(npz_filename, **{'x': total_data_x[s].numpy(), 'y': total_data_y[s].numpy()})    
+  
+  del total_data_x, total_data_y
 
   #prepare real data
   print('Preparing real data....')
-  D_batch_size = (config['batch_size'] * config['num_D_steps'] * config['num_D_accumulations'])
-  loaders = utils.get_data_loaders(**{**config, 'batch_size': D_batch_size})
+  D_batch_size = 2000
+  loaders = utilso.get_data_loaders(**{**config, 'batch_size': D_batch_size, 'shuffle': False})
   x_train = torch.Tensor([])
   y_train = torch.LongTensor([])
   for i,j in loaders[0]:
@@ -64,11 +64,13 @@ def run(config, gan_model, num_instances):
   npz_filename = '%s/%s.npz' % ('samples/real_data', ofile) 
   np.savez(npz_filename, **{'x': x_train.numpy(), 'y': y_train.numpy()})
   print('Real data successfully prepared..!!')
+
+  del x_train, y_train
 	
   #preparing initial weights	
   weights = np.ones((50000,))
   ofilew = 'CIFAR10_weights'
-  npz_filename = '%s/%s.npz' % ('samples/real_data', ofilew)
+  npz_filename = '%s/%s.npz' % ('BigGANOriginal/data_weights', ofilew)
   np.savez(npz_filename, **{'w': weights})
   
 
@@ -83,3 +85,4 @@ def main():
 
 if __name__ == '__main__':
   main()
+
