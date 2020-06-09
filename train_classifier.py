@@ -32,13 +32,13 @@ def main(config):
     b_size = 50000
     normalize_real = transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])
     transform_real = transforms.Compose([normalize_real])
-    trainset_real = GANDataset( 'samples/real_data/CIFAR10_training.npz', 'samples/real_data/CIFAR10_weights.npz', transform=transform_real)
+    trainset_real = GANDataset( 'samples/real_data/CIFAR10_training.npz', 'BigGANOriginal/data_weights/CIFAR10_weights.npz', transform=transform_real)
     trainloader_real = torch.utils.data.DataLoader(trainset_real, batch_size=b_size, shuffle=False, num_workers=8, pin_memory=True)
     
     resnet_real_feats, indices = dist_utils.get_real_feats(trainloader_real,'resnet20')
     persample_weights = dist_utils.get_sample_weights(resnet_real_feats,indices,config)
     
-    
+    del resnet_real_feats, indices
     """
     Training a resnet20 classifier on generated images
     """
@@ -104,3 +104,4 @@ def main(config):
 if __name__ == '__main__':
     config = params.params
     main(config)
+
