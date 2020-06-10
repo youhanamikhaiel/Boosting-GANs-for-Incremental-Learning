@@ -103,7 +103,7 @@ def train(epoch, net, trainloader, trainset, device, optimizer, scheduler, crite
         optimizer.step()
         running_loss += loss.item()
         iter_num +=1
-        if iter_num%125 == 0:
+        if (iter_num%400) == 0:
           scheduler.step()
-    print('Train time: %3.2fs' % (ctime()-t0), end = "  ")
-    print('Train loss: %5.4f' % (running_loss*train_batch_size/len(trainset)), end = "  ")
+          print('Train time: %3.2fs' % (ctime()-t0), end = "  ")
+          print('Train loss: %5.4f' % (running_loss*train_batch_size/len(trainset)), end = "  ")
