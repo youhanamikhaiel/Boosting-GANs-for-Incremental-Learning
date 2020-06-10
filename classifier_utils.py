@@ -89,6 +89,7 @@ def train(epoch, net, trainloader, trainset, device, optimizer, scheduler, crite
     running_loss = 0.0
     t0 = ctime()
     net.train()
+    iter_num=0
     for i, data in enumerate(trainloader, 0):
         inputs, labels = data[0].to(device), data[1].to(device)
         labels = torch.reshape(labels.long(),(-1,))
@@ -101,5 +102,8 @@ def train(epoch, net, trainloader, trainset, device, optimizer, scheduler, crite
         loss.backward()
         optimizer.step()
         running_loss += loss.item()
+        iter_num +=1
+        if iter_num%125 == 0:
+          scheduler.step()
     print('Train time: %3.2fs' % (ctime()-t0), end = "  ")
     print('Train loss: %5.4f' % (running_loss*train_batch_size/len(trainset)), end = "  ")
