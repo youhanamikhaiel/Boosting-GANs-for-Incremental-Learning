@@ -25,6 +25,7 @@ def GAN_training_function(G, D, GD, z_, y_, ema, state_dict, config):
     x = torch.split(x, config['batch_size'])
     y = torch.split(y, config['batch_size'])
     w = torch.Tensor(w).to('cuda')
+    w = ((w-0.5)/0.5)+0.5
     wt = torch.split(w, config['batch_size'])
     counter = 0
     
