@@ -15,7 +15,7 @@ def run(config, gan_model, num_instances):
   filter_ratio = []
   for i in range(config['n_classes']):
     file_name = 'samples_class' + str(i)
-    data,_ = FilteredGenerator.generate_samples_cond(config,c_num_instances*3,gan_model,i)
+    data,_ = FilteredGenerator.generate_samples_cond(config,c_num_instances*4,gan_model,i)
     data, ratio = FilteredGenerator.filter_data(config,data,c_num_instances,'resnet20',i)
     filter_ratio.append(float(ratio))
     target_class = np.ones((data.shape[0]), dtype=int)*i
