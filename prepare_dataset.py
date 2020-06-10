@@ -80,7 +80,7 @@ def main():
 	
   utils.update_config(config)
 
-  run(config,'BigGANOriginal/weights/re_BigGAN_C10_seed0_Gch96_Dch96_bs50_nDs4_Glr2.0e-04_Dlr2.0e-04_Gnlrelu_Dnlrelu_GinitN02_DinitN02_ema',50000)
+  run(config,'re_BigGAN_C10_seed0_Gch96_Dch96_bs50_nDs4_Glr2.0e-04_Dlr2.0e-04_Gnlrelu_Dnlrelu_GinitN02_DinitN02_ema',50000)
   #run(config,'BigGAN_C10_seed0_Gch64_Dch64_bs50_nDs4_Glr2.0e-04_Dlr2.0e-04_Gnlrelu_Dnlrelu_GinitN02_DinitN02_ema',50000)
 
 if __name__ == '__main__':
