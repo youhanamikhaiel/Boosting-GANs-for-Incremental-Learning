@@ -75,22 +75,22 @@ def main(config):
     #import resnet classifier model
     net = resnet20().to(device)
     
+    #calculate number of iteration
+    total_iter = epochs*(50000/train_batch_size)
+    new_epochs = math.ceil(total_iter/(len(trainset)/train_batch_size))
+    
     #define optimization and learning hyperparameters
     criterionMC = nn.CrossEntropyLoss()
     criterionML = nn.BCEWithLogitsLoss(pos_weight=pos_weight*torch.ones([num_classes]).to(device))
     optimizer = optim.SGD(net.parameters(), lr=lr0, momentum=0.9, weight_decay=weight_decay)
     scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[epochs//2,(3*epochs)//4])
     
-    #calculate number of iteration
-    total_iter = epochs*(50000/train_batch_size)
-    new_epochs = math.ceil(total_iter/(len(trainset)/train_batch_size))
     
     #main training 
     t1 = ctime()
     for epoch in range(new_epochs):  # loop over the dataset multiple times
         train(epoch, net, trainloader, trainset, device, optimizer, scheduler, criterionMC, criterionML, alpha)
         evaluate(net, testloader, device)
-        scheduler.step()
     tt = ctime()-t1
     print('Finished Training, total time %4.2fs' % (tt))
 
