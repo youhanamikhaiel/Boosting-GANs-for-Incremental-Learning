@@ -5,8 +5,8 @@ CUDA_VISIBLE_DEVICES=0,1 python train.py \
 --num_G_accumulations 1 --num_D_accumulations 1 --num_epochs 700 \
 --num_D_steps 4 --G_lr 2e-4 --D_lr 2e-4 \
 --dataset C10 \
---G_ch 96 \
---D_ch 96 \
+--G_ch 85 \
+--D_ch 85 \
 --G_ortho 0.0 \
 --G_attn 0 --D_attn 0 \
 --G_init N02 --D_init N02 \
