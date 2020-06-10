@@ -70,8 +70,8 @@ def get_gen_feats(data,weights_file,n_classes=10):
 
     #compute the resnet features for each class
   with torch.no_grad():
-    for j in range(0,data.shape[0],int(data.shape[0]/2)):
-      output = model(data[j:j+int(data.shape[0]/2)].to('cuda'))
+    for j in range(0,data.shape[0],2500):
+      output = model(data[j:j+2500].to('cuda'))
       resnet_gen_feats = torch.cat((resnet_gen_feats,output),dim=0)
   return resnet_gen_feats
 
