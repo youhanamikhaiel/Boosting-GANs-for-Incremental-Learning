@@ -109,6 +109,6 @@ def main(config):
 
 
 if __name__ == '__main__':
-    config = params.params
+    config = params.params64
     main(config)
 
