@@ -76,7 +76,7 @@ def run(config, gan_model, num_instances):
 
 def main():
   
-  gan_weight_file = 'BigGAN_C10_seed0_Gch96_Dch96_bs50_nDs4_Glr2.0e-04_Dlr2.0e-04_Gnlrelu_Dnlrelu_GinitN02_DinitN02_ema'
+  gan_weight_file = 'BigGAN_C10_seed0_Gch64_Dch64_bs50_nDs4_Glr2.0e-04_Dlr2.0e-04_Gnlrelu_Dnlrelu_GinitN02_DinitN02_ema'
 	
   # Loading configuration
   if gan_weight_file[0] == 'B':
@@ -92,7 +92,7 @@ def main():
 	
   utils.update_config(config)
 	
-  run(config,gan_weight_file,50000)
+  run(config,gan_weight_file,250000)
   #run(config,'BigGAN_C10_seed0_Gch64_Dch64_bs50_nDs4_Glr2.0e-04_Dlr2.0e-04_Gnlrelu_Dnlrelu_GinitN02_DinitN02_ema',50000)
 
 if __name__ == '__main__':
